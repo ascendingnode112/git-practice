@@ -1,0 +1,173 @@
+<title>Lesson 2 — What GitHub Adds to Git</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>What GitHub Adds to Git</h1>
+  <p class="lesson-meta">Lesson 0002 · ~12 minutes · git-practice</p>
+
+  <p>
+    Everything in <a href="0001-what-a-commit-really-is.html">Lesson 1</a> happened on your machine.
+    Git needs no network, no account, no GitHub — commits, branches, and history are all local.
+    So what is GitHub, exactly? This lesson gives you the map, then you'll push real commits
+    through it.
+  </p>
+
+  <h2>The idea: a second copy, plus a collaboration layer</h2>
+
+  <p>
+    A <strong>remote</strong> is a copy of your repository stored somewhere else — same snapshot
+    chain, same history. GitHub is a hosting service that holds remotes and wraps tools around
+    them: pull requests, issues, forks.
+    <span class="cite">(<a href="https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories">GitHub Docs, "About remote repositories"</a>)</span>
+  </p>
+
+  <div class="areas">
+    <div class="area"><b>Local repository</b><span class="sub">this machine — full history</span></div>
+    <div class="arrow">push →<br>← fetch / pull</div>
+    <div class="area"><b>Remote "origin"</b><span class="sub">github.com — a full copy</span></div>
+  </div>
+
+  <p>Your repo is already wired up. Run <code>git remote -v</code> and you'll see:</p>
+
+<pre><code><span class="out">origin  https://github.com/ascendingnode112/git-practice.git (fetch)
+origin  https://github.com/ascendingnode112/git-practice.git (push)</span>
+</code></pre>
+
+  <p>
+    <code>origin</code> is not magic — it's just the conventional <em>nickname</em> for the remote you
+    cloned from or added first, so you don't type the URL every time.
+    <span class="cite">(<a href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes">Pro Git §2.5</a>)</span>
+    Three commands move snapshots between the two copies:
+  </p>
+
+  <ul>
+    <li><strong><code>git push</code></strong> — uploads local commits the remote doesn't have.
+      Commits only: uncommitted edits never leave your machine, no matter how often you push.</li>
+    <li><strong><code>git fetch</code></strong> — downloads new remote commits but changes none of
+      your files. Always safe; it's how you look before you leap.</li>
+    <li><strong><code>git pull</code></strong> — <code>fetch</code> plus a merge into your current
+      branch. This one does change your files.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>Decoding git status:</strong> yours says <code>add-notes...origin/add-notes</code>.
+    That means your local branch is linked to its copy on GitHub (a <em>tracking branch</em>),
+    and Git will report "ahead by 1" when you have a commit the remote lacks. That line is your
+    push/pull compass — after this lesson you'll be able to read it.
+  </div>
+
+  <h3>The collaboration layer</h3>
+  <p>
+    On top of hosting, GitHub adds workflow tools that live on the website, not in Git:
+  </p>
+  <ul>
+    <li>A <strong>pull request</strong> is a request to merge one branch into another, with review
+      and discussion attached. The name reads backwards — you're asking the target branch to
+      <em>pull in</em> your branch.
+      <span class="cite">(<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">GitHub Docs, "About pull requests"</a>)</span></li>
+    <li>A <strong>fork</strong> is your own server-side copy of someone else's repo — push freely to
+      yours, then PR back to theirs.</li>
+    <li>An <strong>issue</strong> is a tracked discussion (bug, task, question) attached to the repo.</li>
+  </ul>
+
+  <h2>Check yourself</h2>
+  <p>From memory — no scrolling up.</p>
+
+  <div class="quiz">
+    <div class="quiz-q" data-explain="A remote is a full copy of the repository — same snapshot chain — stored somewhere else, usually a host like GitHub. Neither copy is inherently the 'master' one.">
+      <p class="prompt">What is a <em>remote</em>?</p>
+      <button class="opt">A backup of your working directory</button>
+      <button class="opt" data-correct>A copy of your repository elsewhere</button>
+      <button class="opt">A server that runs your code</button>
+      <button class="opt">A branch that others can edit</button>
+    </div>
+
+    <div class="quiz-q" data-explain="Git is independent, open-source software that works entirely offline. GitHub (owned by Microsoft) is one of several hosting services built around it — GitLab and Bitbucket are others.">
+      <p class="prompt">What is GitHub, relative to Git?</p>
+      <button class="opt">A required component of using Git</button>
+      <button class="opt">The company that develops Git itself</button>
+      <button class="opt">A server needed to make commits</button>
+      <button class="opt" data-correct>A hosting service built around Git</button>
+    </div>
+
+    <div class="quiz-q" data-explain="origin is only the conventional nickname Git assigns to the remote you cloned from (or added first), saving you from typing the URL. You could rename it and nothing would break.">
+      <p class="prompt">What is <code>origin</code>?</p>
+      <button class="opt" data-correct>The default name for your remote</button>
+      <button class="opt">The first commit in a repository</button>
+      <button class="opt">The main branch on the server</button>
+      <button class="opt">The original author of the repo</button>
+    </div>
+
+    <div class="quiz-q" data-explain="fetch downloads new remote commits without touching your files; pull does that same fetch and then merges into your current branch. When unsure, fetch — it is always safe.">
+      <p class="prompt">What's the relationship between <code>fetch</code> and <code>pull</code>?</p>
+      <button class="opt">Fetch is pull plus a merge</button>
+      <button class="opt" data-correct>Pull is fetch plus a merge</button>
+      <button class="opt">Pull works only on main branch</button>
+      <button class="opt">Fetch deletes your unpushed local commits</button>
+    </div>
+
+    <div class="quiz-q" data-explain="A pull request asks for one branch to be merged into another, with review attached. It lives on GitHub, not in Git — the name reads backwards from your perspective as the author.">
+      <p class="prompt">What is a pull request?</p>
+      <button class="opt">A request to download new commits</button>
+      <button class="opt" data-correct>A request to merge your branch</button>
+      <button class="opt">A request to join a repository</button>
+      <button class="opt">A request to delete a branch</button>
+    </div>
+  </div>
+
+  <h2>Now do it for real</h2>
+  <p>
+    This drill includes Lesson 1's skill — stage, commit — because your teaching workspace files are
+    still untracked. You'll snapshot them locally, then move that snapshot to GitHub. Predict every
+    <code>git status</code> before reading it.
+  </p>
+
+<pre><code><span class="comment"># 1. Confirm the wiring you read about.</span>
+git remote -v
+git status          <span class="comment"># predict: untracked files; branch in sync with origin/add-notes</span>
+
+<span class="comment"># 2. Lesson 1 skill: assemble and take the snapshot (local only!).</span>
+git add .
+git commit -m "Add teaching workspace"
+
+<span class="comment"># 3. Read the compass line.</span>
+git status          <span class="comment"># predict: "ahead of 'origin/add-notes' by 1 commit"</span>
+
+<span class="comment"># 4. Is the commit on GitHub yet? Check without changing anything.</span>
+git fetch
+git status          <span class="comment"># predict: still ahead by 1 — fetch found nothing new, push sends, fetch receives</span>
+
+<span class="comment"># 5. Send the snapshot up, then re-read the compass.</span>
+git push
+git status          <span class="comment"># predict: "up to date with 'origin/add-notes'"</span>
+
+<span class="comment"># 6. See the same commit on the other copy.</span>
+gh repo view --web  <span class="comment"># switch to branch add-notes on the site; find your commit</span>
+</code></pre>
+
+  <p>
+    Stretch goal, if you want to touch the collaboration layer today: run
+    <code>gh pr create --web</code> and you'll see GitHub propose merging <code>add-notes</code>
+    into <code>main</code> — that's a pull request taking shape. You can close the tab without
+    creating it; we'll do the full PR-and-merge loop in a later lesson.
+  </p>
+
+  <div class="next-steps">
+    <h3>Go deeper</h3>
+    <p>
+      <strong>Primary source:</strong> read
+      <a href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes">Pro Git §2.5, "Working with Remotes"</a>
+      (free, ~10 min). The
+      <a href="../reference/github-model.html">GitHub model reference sheet</a> compresses this
+      lesson to one page, alongside the
+      <a href="../reference/git-mental-model.html">Git mental model</a> from Lesson 1.
+    </p>
+    <h3>Next lesson</h3>
+    <p>Branches as pointers — the missing piece before we merge <code>add-notes</code> into <code>main</code> via a real pull request.</p>
+  </div>
+
+  <footer class="teacher-note">
+    Anything surprise you — a status line, a push error, the GitHub UI? Ask your teaching agent.
+    Report back how the drill went so your learning record stays accurate.
+  </footer>
+</main>
+<script src="../assets/quiz.js"></script>
