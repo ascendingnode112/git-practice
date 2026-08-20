@@ -8,6 +8,7 @@
 - Chris often dictates via speech-to-text; expect typos in his replies, translate silently.
 
 ## Working notes
+- 2026-08-19 (night, later): Post-drill retake 5/5 (record 0005) — drill-first/quiz-after CONFIRMED as the lesson shape. Pointer model + origin now in glossary. Lesson 4 (PR merge add-notes → main) unlocked. Second commit-typo specimen for the amend lesson: `72ab878 "Add glossage..."` alongside `46a43e2 "Practive..."`.
 - 2026-08-19 (night): Lesson 3 quiz 1/5 pre-drill (record 0004). Recalibration: (1) cap lessons at ~2 new concepts; (2) order lessons drill-first, quiz-after — reading alone isn't encoding for Chris, hands-on is; (3) `origin` missed twice, needs its own micro-moment, not another passing mention; (4) gate Lesson 4 on a pointer-model re-test.
 - 2026-08-19: Workspace created. Repo state at start: branch `add-notes`, two commits (`Initial commit`, `Add a note to the README`), clean tree. He has already made commits by following steps — the fuzzy part is the model underneath.
 - Lesson 0001 targets the snapshot + three-areas model. Do NOT add glossary terms until he demonstrates understanding (quiz + practice), per glossary rules. Candidate first terms: commit, staging area, working directory, repository.

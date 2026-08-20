@@ -35,4 +35,19 @@ Download new remote commits without changing any local files. Always safe.
 **Pull**:
 Fetch, then merge the result into the current branch. Changes your files.
 
-<!-- Pending re-test before adding: origin (misread as "first commit" on 2026-08-19 — see learning record 0003). -->
+## Pointers
+
+**Branch**:
+A movable pointer to one commit — a 41-byte file containing a hash. Committing while on it moves it forward; nothing else does.
+_Avoid_: Copy, fork (reserved for GitHub server-side copies), version
+
+**HEAD**:
+The "you are here" marker: a pointer to the current branch. Switching branches repoints HEAD and rewrites the working directory to match.
+
+**Origin**:
+The conventional nickname for the remote you cloned from or wired up first. A place, not a moment — the history's first commit is the *root commit*.
+_Avoid_: Source, master copy
+
+**Remote-tracking branch** (`origin/main`):
+Your local, read-only record of where a branch was on the remote at last contact (fetch/push/pull). Not a live view.
+_Avoid_: Remote branch (ambiguous — could mean the branch on the server itself)
