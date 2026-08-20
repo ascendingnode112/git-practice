@@ -1,0 +1,58 @@
+<title>GitHub Model — Reference</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>The GitHub Model</h1>
+  <p class="lesson-meta">Reference · git-practice</p>
+
+  <h2>The one-sentence model</h2>
+  <blockquote>
+    Git is the tool; GitHub is a <strong>hosting service</strong> that keeps a copy of your repository
+    (a <strong>remote</strong>) and wraps a collaboration layer — pull requests, issues, forks — around it.
+  </blockquote>
+  <p class="cite">Source: <a href="https://docs.github.com/en/get-started/getting-started-with-git/about-remote-repositories">GitHub Docs, "About remote repositories"</a></p>
+
+  <h2>Local ↔ remote</h2>
+  <div class="areas">
+    <div class="area"><b>Local repository</b><span class="sub">this machine — full history, works offline</span></div>
+    <div class="arrow">push →<br>← fetch / pull</div>
+    <div class="area"><b>Remote "origin"</b><span class="sub">github.com — a full copy, not the "master" copy</span></div>
+  </div>
+  <p>
+    Both sides hold the complete snapshot chain. Neither is inherently primary — <code>origin</code> is
+    just the conventional nickname for the remote you cloned from or added first.
+  </p>
+
+  <h2>Remote commands</h2>
+  <table>
+    <tr><th>Command</th><th>What it actually does</th></tr>
+    <tr><td><code>git remote -v</code></td><td>Lists your remotes and their URLs. Safe, run any time.</td></tr>
+    <tr><td><code>git push</code></td><td>Uploads local commits the remote doesn't have, on the current branch.</td></tr>
+    <tr><td><code>git fetch</code></td><td>Downloads new remote commits but touches none of your files. Always safe.</td></tr>
+    <tr><td><code>git pull</code></td><td><code>fetch</code> + merge into your current branch. Changes your files.</td></tr>
+    <tr><td><code>git clone &lt;url&gt;</code></td><td>Copies an entire remote repository — full history — and wires up <code>origin</code>.</td></tr>
+    <tr><td><code>git push -u origin &lt;branch&gt;</code></td><td>First push of a new branch; <code>-u</code> links it to the remote branch so plain <code>push</code>/<code>pull</code> work after.</td></tr>
+  </table>
+
+  <h2>The collaboration layer (GitHub, not Git)</h2>
+  <table>
+    <tr><th>Concept</th><th>What it is</th></tr>
+    <tr><td>Pull request (PR)</td><td>A request to merge one branch into another, with a place for review and discussion attached. Lives on GitHub, not in Git itself.</td></tr>
+    <tr><td>Fork</td><td>Your own server-side copy of someone else's repository — lets you push freely, then PR back.</td></tr>
+    <tr><td>Issue</td><td>A tracked discussion thread (bug, task, question) attached to the repository.</td></tr>
+    <tr><td>Tracking branch</td><td>The pairing shown as <code>add-notes...origin/add-notes</code> in <code>git status</code> — how Git knows where plain <code>push</code>/<code>pull</code> should go.</td></tr>
+  </table>
+
+  <h2>Facts that prevent confusion later</h2>
+  <table>
+    <tr><th>Fact</th><th>Why it matters</th></tr>
+    <tr><td>Git works fully without GitHub.</td><td>Commits, branches, history — all local. Only push/fetch/pull touch the network.</td></tr>
+    <tr><td>Push sends commits, not files.</td><td>Uncommitted edits never reach GitHub, no matter how many times you push.</td></tr>
+    <tr><td>"Pull request" is really a merge request.</td><td>The name reads backwards: you're asking the target branch to pull your branch in.</td></tr>
+    <tr><td><code>fetch</code> is always safe; <code>pull</code> can merge.</td><td>When unsure what's on the remote, fetch first and look — nothing local changes.</td></tr>
+  </table>
+
+  <p>
+    <a href="../lessons/0002-what-github-adds-to-git.html">← Lesson 2: What GitHub adds to Git</a> ·
+    <a href="git-mental-model.html">Git mental model</a>
+  </p>
+</main>

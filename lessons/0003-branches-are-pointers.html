@@ -1,0 +1,174 @@
+<title>Lesson 3 — Branches Are Pointers</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>Branches Are Pointers</h1>
+  <p class="lesson-meta">Lesson 0003 · ~12 minutes · git-practice</p>
+
+  <p>
+    You've been on a branch called <code>add-notes</code> since this repo began, without needing to
+    know what a branch is. Here's the payoff idea — smaller and stranger than most people expect —
+    and it's the last piece you need before merging your work into <code>main</code> with a real
+    pull request.
+  </p>
+
+  <h2>The idea: labels on snapshots, not containers of files</h2>
+
+  <p>
+    A branch is a <strong>movable pointer to one commit</strong>. Not a copy of your code, not a
+    folder, not a parallel universe — a 41-byte file containing a commit hash. That's the entire
+    implementation.
+    <span class="cite">(<a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Pro Git §3.1</a>)</span>
+    Your repo, right now, drawn honestly:
+  </p>
+
+  <div class="chain">
+    <div class="node">
+      <span class="lbls"><span class="lbl">main</span><span class="lbl muted">origin/main</span></span>
+      <span class="hash">7934de5</span>
+    </div>
+    <div class="link">←</div>
+    <div class="node"><span class="lbls">&nbsp;</span><span class="hash">5738bc2</span></div>
+    <div class="link">←</div>
+    <div class="node"><span class="lbls">&nbsp;</span><span class="hash">46a43e2</span></div>
+    <div class="link">←</div>
+    <div class="node">
+      <span class="lbls"><span class="lbl head">HEAD</span><span class="lbl">add-notes</span><span class="lbl muted">origin/add-notes</span></span>
+      <span class="hash">f89d8f9</span>
+    </div>
+  </div>
+  <p class="chain-caption">One history. The pointers just sit at different places in it.</p>
+
+  <ul>
+    <li><strong>A branch</strong> (<code>main</code>, <code>add-notes</code>) is a label on a commit.
+      When you commit, the branch you're on slides forward to the new snapshot. Nothing else moves it.</li>
+    <li><strong>HEAD</strong> is the "you are here" marker — it points at your current branch.
+      Notice <code>main</code> is still back at the initial commit: nobody has committed while standing on it.</li>
+    <li><strong><code>git switch</code></strong> does two things: repoints HEAD, and rewrites your
+      working directory to match that branch's snapshot. Files tracked only on the other branch
+      vanish from disk — and come back when you return. Nothing is ever lost; you're choosing which
+      snapshot is unpacked.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>The pointer you already met:</strong> <code>origin/main</code> and <code>origin/add-notes</code>
+    are <em>remote-tracking</em> pointers — your local, read-only record of where each branch was on
+    GitHub <em>at last contact</em>. They are not live. <code>main</code> is your branch;
+    <code>origin/main</code> is your note about GitHub's copy of it. They drift apart until a
+    fetch, push, or pull updates the record.
+    <span class="cite">(<a href="https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches">Pro Git §3.5</a>)</span>
+  </div>
+
+  <h2>Check yourself</h2>
+  <p>From memory. Question 3 revisits an old friend.</p>
+
+  <div class="quiz">
+    <div class="quiz-q" data-explain="A branch is a 41-byte file holding one commit hash. It contains no files and copies nothing — its 'contents' are just whatever commits are reachable parent-ward from where it points.">
+      <p class="prompt">What is a branch?</p>
+      <button class="opt">A separate copy of the repository</button>
+      <button class="opt" data-correct>A movable pointer to one commit</button>
+      <button class="opt">A folder containing your changed files</button>
+      <button class="opt">A snapshot of the working directory</button>
+    </div>
+
+    <div class="quiz-q" data-explain="HEAD marks where you are — normally by pointing at a branch, which in turn points at a commit. It is not automatically the newest commit anywhere; it's wherever you're standing.">
+      <p class="prompt">What is <code>HEAD</code>?</p>
+      <button class="opt">A pointer to the newest commit</button>
+      <button class="opt">The main branch of the repository</button>
+      <button class="opt" data-correct>A pointer to your current branch</button>
+      <button class="opt">The first commit in the repository</button>
+    </div>
+
+    <div class="quiz-q" data-explain="origin is a place, not a moment: your nickname for the remote you cloned from or wired up first. The history's first commit is the root commit — a different concept entirely.">
+      <p class="prompt">In <code>origin/main</code>, what does <code>origin</code> refer to?</p>
+      <button class="opt">The root commit of the repository</button>
+      <button class="opt" data-correct>Your nickname for the GitHub remote</button>
+      <button class="opt">The earliest starting point of history</button>
+      <button class="opt">The primary copy of the project</button>
+    </div>
+
+    <div class="quiz-q" data-explain="Remote-tracking pointers update only when you fetch, push, or pull — they're your last-synced note about the remote, not a live view. If a teammate pushed five minutes ago, origin/main doesn't know yet.">
+      <p class="prompt">What is <code>origin/main</code>, on your machine?</p>
+      <button class="opt">A live view of the remote's main</button>
+      <button class="opt" data-correct>Your local record of the remote's main</button>
+      <button class="opt">A backup copy of your local main</button>
+      <button class="opt">The branch created when you first clone</button>
+    </div>
+
+    <div class="quiz-q" data-explain="Only the branch HEAD points at slides forward to the new snapshot. Every other pointer — other branches, remote-tracking records — stays exactly where it was. That's why main is still at the initial commit.">
+      <p class="prompt">When you commit, what happens to the pointers?</p>
+      <button class="opt">Every branch pointer gets moved forward</button>
+      <button class="opt">A new branch is created automatically</button>
+      <button class="opt">The HEAD detaches from your branch</button>
+      <button class="opt" data-correct>The current branch pointer moves forward</button>
+    </div>
+  </div>
+
+  <h2>Now do it for real</h2>
+  <p>
+    Fair warning for step 4: when you stand on <code>main</code>, every lesson file — including the
+    one you're reading — disappears from disk, because <code>main</code>'s snapshot predates them.
+    Your browser has this page loaded, so don't reload until you've switched back. Predict every
+    output first.
+  </p>
+
+<pre><code><span class="comment"># 1. Housekeeping reps (lessons 1–2): snapshot the glossary + learning records, send to GitHub.</span>
+git status          <span class="comment"># predict: NOTES.md + assets/course.css modified; GLOSSARY.md,</span>
+                    <span class="comment"># learning-records/, and this lesson's files untracked</span>
+git add .
+git commit -m "Add glossary, learning records, and lesson 3"
+git push
+git status          <span class="comment"># predict: clean, up to date with origin/add-notes</span>
+
+<span class="comment"># 2. Read the map. Find all five pointers from the diagram above.</span>
+git log --oneline --all --graph
+git branch -a -v    <span class="comment"># note: main is still at 7934de5 — three snapshots behind you</span>
+
+<span class="comment"># 3. Proof that a branch is just a file with a hash in it.</span>
+cat .git/HEAD                    <span class="comment"># predict: ref: refs/heads/add-notes</span>
+cat .git/refs/heads/add-notes    <span class="comment"># predict: the full hash of your newest commit</span>
+git log -1 --format=%H           <span class="comment"># same hash. That 41-byte file IS the branch.</span>
+
+<span class="comment"># 4. The dramatic part: switch to main and watch the directory obey the pointer.</span>
+git switch main
+ls                  <span class="comment"># predict: lessons/, assets/, GLOSSARY.md... all gone. README.md remains.</span>
+git log --oneline   <span class="comment"># predict: ONE commit — history reachable from main's pointer only</span>
+
+<span class="comment"># 5. Switch back. Everything returns — the snapshots never went anywhere.</span>
+git switch add-notes
+ls                  <span class="comment"># all back</span>
+
+<span class="comment"># 6. Prove branch creation copies nothing: make one, inspect it, delete it.</span>
+git switch -c scratch
+cat .git/refs/heads/scratch      <span class="comment"># predict: identical hash to add-notes — same commit, new label</span>
+git switch add-notes
+git branch -d scratch            <span class="comment"># deletes the label; no commits harmed</span>
+</code></pre>
+
+  <p>
+    If step 4 felt safe instead of alarming, the model has landed: switching branches is choosing
+    which snapshot is unpacked into your working directory. The commits themselves are permanent.
+  </p>
+
+  <div class="next-steps">
+    <h3>Go deeper</h3>
+    <p>
+      <strong>Primary source:</strong> read
+      <a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Pro Git §3.1, "Branches in a Nutshell"</a>
+      (free, ~10 min) — with diagrams of exactly what you just proved with <code>cat</code>.
+      The <a href="../reference/branch-model.html">branch model reference sheet</a> compresses this page;
+      earlier sheets: <a href="../reference/git-mental-model.html">Git mental model</a>,
+      <a href="../reference/github-model.html">GitHub model</a>.
+    </p>
+    <h3>Next lesson</h3>
+    <p>
+      The payoff: open a pull request on GitHub to merge <code>add-notes</code> into <code>main</code>,
+      merge it, and watch every pointer in today's diagram move.
+    </p>
+  </div>
+
+  <footer class="teacher-note">
+    Surprised by anything — the vanishing files, the hash in the branch file, a switch refusing to run?
+    Ask your teaching agent, and report your quiz + drill results so the learning record stays honest.
+  </footer>
+</main>
+<script src="../assets/quiz.js"></script>

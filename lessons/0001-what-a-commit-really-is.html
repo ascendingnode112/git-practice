@@ -1,0 +1,144 @@
+<title>Lesson 1 — What a Commit Really Is</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>What a Commit Really Is</h1>
+  <p class="lesson-meta">Lesson 0001 · ~10 minutes · git-practice</p>
+
+  <p>
+    You've already made two commits in this repo by following steps. This lesson replaces the steps
+    with the model underneath, so that <code>git status</code> output stops being noise and starts
+    being a map. One idea, then you practice it for real.
+  </p>
+
+  <h2>The idea: snapshots moving through three areas</h2>
+
+  <p>
+    Git stores your project as a chain of <strong>snapshots</strong>. A commit is not a diff, not a
+    patch, not "the changes" — it is a full picture of every tracked file at one moment, plus a
+    pointer to the snapshot before it. Git <em>shows</em> you diffs because they're easier to read,
+    but that's presentation, not storage.
+    <span class="cite">(<a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F">Pro Git §1.3</a>)</span>
+  </p>
+
+  <p>Every change you make travels through three places:</p>
+
+  <div class="areas">
+    <div class="area"><b>Working directory</b><span class="sub">the files you edit</span></div>
+    <div class="arrow">git add →</div>
+    <div class="area"><b>Staging area</b><span class="sub">the next snapshot, assembled</span></div>
+    <div class="arrow">git commit →</div>
+    <div class="area"><b>Repository</b><span class="sub">permanent snapshots (.git)</span></div>
+  </div>
+
+  <ul>
+    <li><strong>Working directory</strong> — your actual files. Editing here changes nothing in Git's history.</li>
+    <li><strong>Staging area</strong> — a loading dock where you assemble the <em>next</em> snapshot.
+      <code>git add</code> copies a file's current state here. This is why you can edit five files but commit only two.</li>
+    <li><strong>Repository</strong> — the <code>.git</code> directory, where <code>git commit</code> files the
+      assembled snapshot away permanently.</li>
+  </ul>
+
+  <div class="callout">
+    <strong>The confidence unlock:</strong> once a change is committed, it is nearly impossible to lose.
+    Git keeps snapshots even through most mistakes. Real danger only exists for work that was
+    <em>never committed</em>. This is why the pros commit early and often — every commit is a save point.
+    <span class="cite">(<a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F">Pro Git §1.3</a>)</span>
+  </div>
+
+  <p>
+    One subtlety worth knowing now: <code>git add</code> copies the file <em>as it is at that moment</em>.
+    If you edit the file again afterward, the new edit is back in the working directory only — the staged
+    copy is the older version until you <code>add</code> again. <code>git status</code> will show the same
+    file in both lists, which looks like a bug until you know this.
+  </p>
+
+  <h2>Check yourself</h2>
+  <p>From memory — no scrolling up. Click an answer to see how you did.</p>
+
+  <div class="quiz">
+    <div class="quiz-q" data-explain="Git stores a full snapshot of all tracked files each time. Diffs are computed for display only — which is why any commit can be restored instantly and completely.">
+      <p class="prompt">When you run <code>git commit</code>, what does Git permanently store?</p>
+      <button class="opt">A diff against the previous commit</button>
+      <button class="opt" data-correct>A snapshot of your staged files</button>
+      <button class="opt">A copy of the whole disk</button>
+      <button class="opt">A log of the commands run</button>
+    </div>
+
+    <div class="quiz-q" data-explain="Changes flow working directory → staging area → repository. git add moves them one step right; git commit moves them the final step.">
+      <p class="prompt">What order do your changes flow through Git's areas?</p>
+      <button class="opt">Repository, staging area, then working directory</button>
+      <button class="opt">Staging area, working directory, then repository</button>
+      <button class="opt" data-correct>Working directory, staging area, then repository</button>
+      <button class="opt">Working directory, repository, then staging area</button>
+    </div>
+
+    <div class="quiz-q" data-explain="Commits are built from the staging area, not from your working directory. An edited-but-unstaged file contributes nothing to the next snapshot — stage it first with git add.">
+      <p class="prompt">You edited <code>README.md</code>, then ran <code>git commit</code> — Git says "nothing to commit." Why?</p>
+      <button class="opt" data-correct>The change was never staged first</button>
+      <button class="opt">The file is ignored by Git</button>
+      <button class="opt">The branch is currently locked out</button>
+      <button class="opt">The commit message was left empty</button>
+    </div>
+
+    <div class="quiz-q" data-explain="The staging area is a composition tool: you pick which changes go into the next snapshot. That's what lets you commit two related files now and leave three unrelated edits for a later commit.">
+      <p class="prompt">What does the staging area actually let you do?</p>
+      <button class="opt">Store backup copies of deleted work files</button>
+      <button class="opt">Share your changes with other team members</button>
+      <button class="opt" data-correct>Choose exactly what the next snapshot includes</button>
+      <button class="opt">Test your code before it gets committed</button>
+    </div>
+  </div>
+
+  <h2>Now do it for real</h2>
+  <p>
+    In a terminal, in <code>~/git-practice</code>. The feedback loop is <code>git status</code> —
+    run it after <em>every</em> step and predict what it will say before you look.
+  </p>
+
+<pre><code><span class="comment"># 1. Look at where you are. Two snapshots exist already.</span>
+git log --oneline
+git status          <span class="comment"># predict: your new lesson files listed as "Untracked" —</span>
+                    <span class="comment"># Git sees them but snapshots nothing until you git add them</span>
+
+<span class="comment"># 2. Edit README.md — add any line. Where does the change live now?</span>
+echo "Learning the three areas" &gt;&gt; README.md
+git status          <span class="comment"># predict: "Changes not staged for commit"</span>
+
+<span class="comment"># 3. Move it to the staging area.</span>
+git add README.md
+git status          <span class="comment"># predict: "Changes to be committed"</span>
+
+<span class="comment"># 4. Edit the SAME file again — the subtlety from above.</span>
+echo "A second line" &gt;&gt; README.md
+git status          <span class="comment"># predict: README.md appears in BOTH lists. Why?</span>
+
+<span class="comment"># 5. Stage the newer edit too, then snapshot it.</span>
+git add README.md
+git commit -m "Practice the three areas"
+git log --oneline   <span class="comment"># predict: three snapshots now</span>
+</code></pre>
+
+  <p>
+    If every <code>git status</code> matched your prediction — that's the whole game. You just read
+    Git's map instead of following steps.
+  </p>
+
+  <div class="next-steps">
+    <h3>Go deeper</h3>
+    <p>
+      <strong>Primary source:</strong> read
+      <a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F">Pro Git §1.3, "What is Git?"</a>
+      (free, ~5 min) — the snapshot model straight from the source. Keep the
+      <a href="../reference/git-mental-model.html">mental-model reference sheet</a> handy; it compresses
+      this lesson into one page.
+    </p>
+    <h3>Next lesson</h3>
+    <p>Branches — including why the <code>add-notes</code> branch you're sitting on is just a 41-byte pointer to a snapshot.</p>
+  </div>
+
+  <footer class="teacher-note">
+    Stuck, surprised by a git status output, or curious why something works? Ask your teaching agent —
+    that's what it's for. Tell it how the practice went so it can log what you've learned.
+  </footer>
+</main>
+<script src="../assets/quiz.js"></script>

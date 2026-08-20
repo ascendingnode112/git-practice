@@ -1,0 +1,154 @@
+<title>Lesson 4 — Merging with a Pull Request</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>Merging with a Pull Request</h1>
+  <p class="lesson-meta">Lesson 0004 · ~15 minutes · git-practice</p>
+
+  <p>
+    The payoff lesson. You already own every piece: snapshots, push, and the pointer model. Today
+    you merge <code>add-notes</code> into <code>main</code> through a real pull request — and a fun
+    fact: <strong>you already opened it</strong>. Lesson 2's stretch goal went further than you
+    thought; PR #1 has been sitting open since last night.
+  </p>
+
+  <h2>Warm-up: yesterday's pointers, from memory</h2>
+  <p>Spaced retrieval — this is what makes it stick. No peeking at the reference sheets.</p>
+
+  <div class="quiz">
+    <div class="quiz-q" data-explain="A branch is a movable label — a 41-byte file with a hash. 'A snapshot of all tracked files' describes a commit, which is exactly the thing a branch points at.">
+      <p class="prompt">What is a branch?</p>
+      <button class="opt">A snapshot of all tracked files</button>
+      <button class="opt" data-correct>A movable label on one commit</button>
+      <button class="opt">A folder of files being edited</button>
+      <button class="opt">A copy of the main branch</button>
+    </div>
+    <div class="quiz-q" data-explain="HEAD is the you-are-here marker: it points at your current branch, wherever that is — not at the newest commit in the repo.">
+      <p class="prompt">What does <code>HEAD</code> point at?</p>
+      <button class="opt">Points at the newest overall commit</button>
+      <button class="opt">Points at the root commit always</button>
+      <button class="opt" data-correct>Points at the branch you're on</button>
+      <button class="opt">Points at the remote main branch</button>
+    </div>
+    <div class="quiz-q" data-explain="Remote-tracking pointers are your last-synced record, updated only when you talk to the remote. This exact fact stars in today's drill — watch for it.">
+      <p class="prompt">When does <code>origin/add-notes</code> move on your machine?</p>
+      <button class="opt">Instantly whenever the remote branch changes</button>
+      <button class="opt">Every time you make a commit</button>
+      <button class="opt">Only when you switch a branch</button>
+      <button class="opt" data-correct>Only when you fetch, push, pull</button>
+    </div>
+  </div>
+
+  <h2>Two new ideas</h2>
+
+  <h3>1. A pull request tracks a branch, not a batch of commits</h3>
+  <p>
+    Your open PR is titled "Add a note to the README" — because when it was created, that was the
+    branch's story. But a PR is a live proposal: <em>merge branch X into branch Y</em>. Every commit
+    you've pushed to <code>add-notes</code> since has flowed into it automatically. It now carries
+    your entire teaching workspace, and today's housekeeping commit will join it too, seconds after
+    you push.
+    <span class="cite">(<a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">GitHub Docs, "About pull requests"</a>)</span>
+  </p>
+
+  <h3>2. Merging moves the target pointer — via a merge commit</h3>
+  <p>
+    When you press the merge button, GitHub creates a <strong>merge commit</strong> — a snapshot with
+    <em>two parents</em> (old <code>main</code> and the tip of <code>add-notes</code>) — and moves
+    <strong>remote <code>main</code></strong> to it. That's the whole event. <code>add-notes</code>
+    doesn't move; nothing on your machine moves. Your local <code>main</code> and your
+    <code>origin/main</code> record only catch up when you fetch — and until then,
+    <code>git status</code> will happily report "up to date," because it only ever compares against
+    your stale local record, never the network.
+    <span class="cite">(<a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">Pro Git §3.2</a>)</span>
+  </p>
+
+  <h2>The drill</h2>
+  <p>
+    Predict every output before reading it. On the merge screen, use the default
+    <strong>"Merge pull request"</strong> button — not Squash or Rebase (those rewrite history;
+    later topic, if ever).
+  </p>
+
+<pre><code><span class="comment"># 1. Housekeeping reps: snapshot last night's learning records, send up.</span>
+git status          <span class="comment"># predict: GLOSSARY, NOTES, two records modified; record 0005 + this lesson untracked</span>
+git add .
+git commit -m "Record lesson 3 results and add lesson 4"
+git push
+
+<span class="comment"># 2. Watch the open PR grow. Its title is stale; its contents are live.</span>
+gh pr view          <span class="comment"># predict: title "Add a note to the README" — but look at the commit list</span>
+gh pr view --web    <span class="comment"># browse the Commits and Files-changed tabs: your whole workspace is in there</span>
+
+<span class="comment"># 3. Merge it: green "Merge pull request" button → Confirm.</span>
+<span class="comment">#    Afterward GitHub offers "Delete branch" — click it. It deletes only the</span>
+<span class="comment">#    remote LABEL; every commit is now reachable from main. (Labels, not containers.)</span>
+
+<span class="comment"># 4. Back in the terminal: your machine has not heard the news.</span>
+git switch main
+git status          <span class="comment"># predict: "up to date with 'origin/main'" — true vs your STALE record, false vs GitHub</span>
+git fetch
+git status          <span class="comment"># predict: "behind 'origin/main' by 6 commits, can be fast-forwarded"</span>
+git pull            <span class="comment"># predict: Fast-forward — local main slides up to the merge commit</span>
+git log --oneline --graph   <span class="comment"># find the diamond: one commit with two parent lines</span>
+
+<span class="comment"># 5. Cleanup: the label did its job.</span>
+git branch -d add-notes     <span class="comment"># predict: deletes cleanly — nothing is stranded</span>
+git fetch --prune           <span class="comment"># drop the remote-tracking record for the deleted remote branch</span>
+git branch -a -v            <span class="comment"># predict: main + origin/main, together at the merge commit</span>
+</code></pre>
+
+  <p>
+    From here on, you work on <code>main</code> — the branch cycle (branch → commits → PR → merge →
+    delete) is complete, and it's the same loop your engineers run every day.
+  </p>
+
+  <h2>Now check yourself — after the drill, not before</h2>
+
+  <div class="quiz">
+    <div class="quiz-q" data-explain="Merging moves only the target branch, to the new merge commit. The source branch never moves — which is why deleting it afterward is pure label-cleanup.">
+      <p class="prompt">On GitHub, at the moment the PR merged, what happened to the branch pointers?</p>
+      <button class="opt">Add-notes moved forward; main stayed put</button>
+      <button class="opt">Both of the branch pointers moved</button>
+      <button class="opt" data-correct>Main moved forward; add-notes stayed put</button>
+      <button class="opt">Neither pointer moved until you fetched</button>
+    </div>
+    <div class="quiz-q" data-explain="git status never touches the network — it compares your branch to your origin/main record, which was last updated before the merge. Fetch first, then trust it.">
+      <p class="prompt">Right after the merge, before fetching, <code>git status</code> on <code>main</code> said "up to date." Why?</p>
+      <button class="opt">The pull request was not merged yet</button>
+      <button class="opt" data-correct>Your record of remote main is stale</button>
+      <button class="opt">Status compares against the live remote copy</button>
+      <button class="opt">Main and origin/main are the same pointer</button>
+    </div>
+    <div class="quiz-q" data-explain="A merge commit joins two histories, so it records two parents — old main and the add-notes tip. That's the diamond in your log graph; every ordinary commit has one parent.">
+      <p class="prompt">What is a merge commit?</p>
+      <button class="opt">A copy of the pull request</button>
+      <button class="opt">A commit that deletes a branch</button>
+      <button class="opt" data-correct>A snapshot with two parent commits</button>
+      <button class="opt">The last commit on the branch</button>
+    </div>
+  </div>
+
+  <div class="next-steps">
+    <h3>Go deeper</h3>
+    <p>
+      <strong>Primary source:</strong> read
+      <a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">Pro Git §3.2, "Basic Branching and Merging"</a>
+      (free, ~15 min) — the same loop you just ran, including your first look at a conflict, which is
+      our next stop. New one-pager: <a href="../reference/merge-and-pr.html">merge &amp; PR reference</a>.
+      Earlier sheets: <a href="../reference/branch-model.html">branch model</a> ·
+      <a href="../reference/github-model.html">GitHub model</a> ·
+      <a href="../reference/git-mental-model.html">Git mental model</a>.
+    </p>
+    <h3>Next lesson</h3>
+    <p>
+      Merge conflicts on purpose — we'll manufacture one in a safe branch so the scariest Git moment
+      becomes a routine one. After that: undoing things, starring your two typo'd commit messages.
+    </p>
+  </div>
+
+  <footer class="teacher-note">
+    Anything surprising on the merge screen, or a prediction that missed? Ask your teaching agent,
+    then report drill + quiz results for the learning record.
+  </footer>
+</main>
+<script src="../assets/quiz.js"></script>

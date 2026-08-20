@@ -1,0 +1,45 @@
+<title>Git Mental Model — Reference</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>The Git Mental Model</h1>
+  <p class="lesson-meta">Reference · git-practice</p>
+
+  <h2>The one-sentence model</h2>
+  <blockquote>
+    Git is a series of <strong>snapshots</strong> of your whole project. A commit is one snapshot,
+    plus a pointer to the snapshot that came before it.
+  </blockquote>
+  <p class="cite">Source: <a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F">Pro Git §1.3, "Snapshots, Not Differences"</a></p>
+
+  <h2>The three areas</h2>
+  <div class="areas">
+    <div class="area"><b>Working directory</b><span class="sub">the files you edit</span></div>
+    <div class="arrow">git add →</div>
+    <div class="area"><b>Staging area</b><span class="sub">the next snapshot, assembled</span></div>
+    <div class="arrow">git commit →</div>
+    <div class="area"><b>Repository</b><span class="sub">permanent snapshots (.git)</span></div>
+  </div>
+  <p>Every file change flows left to right. <code>git status</code> tells you where each change currently sits.</p>
+
+  <h2>Core commands</h2>
+  <table>
+    <tr><th>Command</th><th>What it actually does</th></tr>
+    <tr><td><code>git status</code></td><td>Shows where every change sits across the three areas. Safe, run it constantly.</td></tr>
+    <tr><td><code>git add &lt;file&gt;</code></td><td>Copies the file's current state into the staging area. Editing after <code>add</code> requires another <code>add</code>.</td></tr>
+    <tr><td><code>git commit -m "…"</code></td><td>Turns the staging area into a permanent snapshot in the repository.</td></tr>
+    <tr><td><code>git log --oneline</code></td><td>Lists snapshots, newest first: short hash + message.</td></tr>
+    <tr><td><code>git diff</code></td><td>Working directory vs. staging area — what you have NOT staged yet.</td></tr>
+    <tr><td><code>git diff --staged</code></td><td>Staging area vs. last commit — exactly what the next commit will contain.</td></tr>
+  </table>
+
+  <h2>Facts that prevent confusion later</h2>
+  <table>
+    <tr><th>Fact</th><th>Why it matters</th></tr>
+    <tr><td>A commit is a snapshot, not a diff.</td><td>Git shows you diffs, but it stores full snapshots. Checking out any commit restores everything instantly.</td></tr>
+    <tr><td>Staging is a copy, not a mark.</td><td><code>git add</code> copies content at that moment. Later edits are not included until you <code>add</code> again.</td></tr>
+    <tr><td>Committed work is nearly impossible to lose.</td><td>Once snapshotted, Git keeps it even through most mistakes. Danger only lives in never-committed changes.</td></tr>
+    <tr><td>The hash identifies the snapshot.</td><td>Every commit's ID (e.g. <code>5738bc2</code>) is a checksum of its content — same content, same ID, tamper-evident.</td></tr>
+  </table>
+
+  <p><a href="../lessons/0001-what-a-commit-really-is.html">← Lesson 1: What a commit really is</a></p>
+</main>

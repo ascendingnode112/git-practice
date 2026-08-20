@@ -1,0 +1,252 @@
+/* Shared stylesheet for all git-practice lessons and reference docs. */
+
+:root {
+  --bg: #fffef9;
+  --ink: #1a1a1a;
+  --muted: #6b6b60;
+  --accent: #b03a2e;
+  --link: #1a5276;
+  --rule: #ddd8c8;
+  --code-bg: #f4f1e8;
+  --good: #1e7145;
+  --bad: #b03a2e;
+  --card: #fbf9f1;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-size: 19px;
+  line-height: 1.55;
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 500;
+  font-style: italic;
+  margin: 0 0 0.25rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.35rem;
+  font-weight: 500;
+  font-style: italic;
+  margin: 2.5rem 0 0.75rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.25rem;
+}
+
+h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+
+.lesson-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+code, pre {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.82em;
+  background: var(--code-bg);
+  border-radius: 3px;
+}
+
+code { padding: 0.1em 0.35em; }
+
+pre {
+  padding: 0.9rem 1.1rem;
+  overflow-x: auto;
+  line-height: 1.5;
+  border: 1px solid var(--rule);
+}
+pre code { background: none; padding: 0; }
+
+pre .comment { color: var(--muted); }
+pre .out { color: var(--muted); }
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.1rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  background: var(--card);
+  font-style: italic;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.92em;
+}
+th, td {
+  text-align: left;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+th {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.callout {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+.callout strong:first-child { color: var(--accent); }
+
+.cite {
+  font-size: 0.8em;
+  color: var(--muted);
+}
+
+/* Three-areas diagram (pure HTML/CSS, reused across docs) */
+.areas {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+.areas .area {
+  flex: 1;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  padding: 0.9rem 0.6rem;
+  background: var(--card);
+}
+.areas .area b { display: block; font-size: 0.95rem; margin-bottom: 0.25rem; }
+.areas .area .sub { color: var(--muted); display: block; }
+.areas .arrow {
+  align-self: center;
+  padding: 0 0.5rem;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 0.78rem;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Quiz widget (used with quiz.js) */
+.quiz { counter-reset: quizq; margin: 1.5rem 0; }
+.quiz-q {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--card);
+  padding: 1.1rem 1.3rem;
+  margin: 1.25rem 0;
+}
+.quiz-q > p.prompt { margin: 0 0 0.75rem; font-weight: 600; }
+.quiz-q > p.prompt::before {
+  counter-increment: quizq;
+  content: counter(quizq) ". ";
+  color: var(--accent);
+}
+.quiz-q button.opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 0.95em;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  margin: 0.4rem 0;
+  cursor: pointer;
+}
+.quiz-q button.opt:hover { border-color: var(--ink); }
+.quiz-q.answered button.opt { cursor: default; }
+.quiz-q button.opt.correct { border-color: var(--good); background: #eaf5ee; }
+.quiz-q button.opt.wrong { border-color: var(--bad); background: #f9ebe9; }
+.quiz-q .explain {
+  display: none;
+  margin: 0.75rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--rule);
+  font-size: 0.92em;
+}
+.quiz-q.answered .explain { display: block; }
+.quiz-q .verdict { font-weight: 600; }
+.quiz-q .verdict.good { color: var(--good); }
+.quiz-q .verdict.bad { color: var(--bad); }
+
+/* Commit-chain diagram (branches/merge lessons) */
+.chain {
+  display: flex;
+  align-items: flex-start;
+  margin: 2rem 0;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+.chain .node { text-align: center; flex-shrink: 0; }
+.chain .lbls { display: block; min-height: 3.1em; margin-bottom: 0.35rem; }
+.chain .lbl {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 0.05em 0.4em;
+  margin: 0 0.12em 0.25em;
+  white-space: nowrap;
+}
+.chain .lbl.muted { border-color: var(--muted); color: var(--muted); }
+.chain .lbl.head { background: var(--accent); color: #fff; border-color: var(--accent); }
+.chain .hash {
+  display: inline-block;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.65rem;
+  background: var(--card);
+}
+.chain .link {
+  flex-shrink: 0;
+  padding: 3.45em 0.45rem 0;
+  color: var(--muted);
+}
+.chain-caption {
+  font-size: 0.85em;
+  color: var(--muted);
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+}
+
+.next-steps {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--ink);
+  font-size: 0.95em;
+}
+
+footer.teacher-note {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+@media print {
+  body { font-size: 11pt; background: #fff; }
+  .quiz, footer.teacher-note { display: none; }
+}

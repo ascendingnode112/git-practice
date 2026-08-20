@@ -1,0 +1,64 @@
+<title>Branch Model — Reference</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>The Branch Model</h1>
+  <p class="lesson-meta">Reference · git-practice</p>
+
+  <h2>The one-sentence model</h2>
+  <blockquote>
+    A branch is a <strong>movable pointer to one commit</strong> — a 41-byte file containing a hash.
+    <strong>HEAD</strong> points to whichever branch you're on, and committing moves that branch forward.
+  </blockquote>
+  <p class="cite">Source: <a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Pro Git §3.1, "Branches in a Nutshell"</a></p>
+
+  <h2>This repo, drawn as pointers</h2>
+  <div class="chain">
+    <div class="node">
+      <span class="lbls"><span class="lbl">main</span><span class="lbl muted">origin/main</span></span>
+      <span class="hash">7934de5</span>
+    </div>
+    <div class="link">←</div>
+    <div class="node"><span class="lbls">&nbsp;</span><span class="hash">5738bc2</span></div>
+    <div class="link">←</div>
+    <div class="node"><span class="lbls">&nbsp;</span><span class="hash">46a43e2</span></div>
+    <div class="link">←</div>
+    <div class="node">
+      <span class="lbls"><span class="lbl head">HEAD</span><span class="lbl">add-notes</span><span class="lbl muted">origin/add-notes</span></span>
+      <span class="hash">f89d8f9</span>
+    </div>
+  </div>
+  <p class="chain-caption">Arrows point parent-ward: each commit stores its parent's hash. One history, several pointers into it.</p>
+
+  <h2>The three kinds of pointer</h2>
+  <table>
+    <tr><th>Pointer</th><th>What it is</th></tr>
+    <tr><td>Branch (<code>main</code>, <code>add-notes</code>)</td><td>A movable label on one commit. Committing while on it moves it forward; nothing else does.</td></tr>
+    <tr><td><code>HEAD</code></td><td>Points at the branch you're on — "you are here." Switching branches repoints HEAD and rewrites your working directory to match.</td></tr>
+    <tr><td>Remote-tracking (<code>origin/main</code>)</td><td>Your local, read-only record of where a branch was on the remote at last contact (fetch/push). Not live — it does not move until you talk to the remote.</td></tr>
+  </table>
+
+  <h2>Core commands</h2>
+  <table>
+    <tr><th>Command</th><th>What it actually does</th></tr>
+    <tr><td><code>git branch -v</code></td><td>Lists local branches and the commit each points at. <code>-a</code> adds remote-tracking ones.</td></tr>
+    <tr><td><code>git switch &lt;branch&gt;</code></td><td>Repoints HEAD and rewrites the working directory to that branch's snapshot.</td></tr>
+    <tr><td><code>git switch -c &lt;name&gt;</code></td><td>Creates a new branch at the current commit and switches to it. Cheap: writes one 41-byte file.</td></tr>
+    <tr><td><code>git log --oneline --all --graph</code></td><td>Draws the whole commit graph with every pointer labeled. The map view.</td></tr>
+    <tr><td><code>git branch -d &lt;name&gt;</code></td><td>Deletes the pointer (not the commits). Refuses if unmerged work would be stranded.</td></tr>
+  </table>
+
+  <h2>Facts that prevent confusion later</h2>
+  <table>
+    <tr><th>Fact</th><th>Why it matters</th></tr>
+    <tr><td>Branches are labels, not containers.</td><td>Commits aren't "in" a branch; a branch is a pointer, and its history is whatever is reachable parent-ward from it.</td></tr>
+    <tr><td>Switching rewrites your files.</td><td>Files tracked only on another branch vanish from disk and reappear when you switch back. Nothing is lost — snapshots are permanent.</td></tr>
+    <tr><td><code>main</code> and <code>origin/main</code> are different pointers.</td><td>One is your local branch; the other is your last-known record of the remote's. They drift apart until you fetch/push/pull.</td></tr>
+    <tr><td>Creating a branch copies nothing.</td><td>No duplicate files, no new snapshot — just a new 41-byte pointer file. Branch freely.</td></tr>
+  </table>
+
+  <p>
+    <a href="../lessons/0003-branches-are-pointers.html">← Lesson 3: Branches are pointers</a> ·
+    <a href="git-mental-model.html">Git mental model</a> ·
+    <a href="github-model.html">GitHub model</a>
+  </p>
+</main>

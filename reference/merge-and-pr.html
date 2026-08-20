@@ -1,0 +1,56 @@
+<title>Merge & Pull Request — Reference</title>
+<link rel="stylesheet" href="../assets/course.css">
+<main>
+  <h1>Merge &amp; Pull Request</h1>
+  <p class="lesson-meta">Reference · git-practice</p>
+
+  <h2>The one-sentence model</h2>
+  <blockquote>
+    A pull request is a <strong>proposal to merge one branch into another</strong>, tracked live against
+    the source branch; merging it moves the target branch's pointer forward to a new
+    <strong>merge commit</strong> — a snapshot with two parents.
+  </blockquote>
+  <p class="cite">Sources: <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests">GitHub Docs, "About pull requests"</a> · <a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">Pro Git §3.2</a></p>
+
+  <h2>PR lifecycle</h2>
+  <table>
+    <tr><th>Stage</th><th>What's true</th></tr>
+    <tr><td>Open</td><td>The PR tracks the <em>source branch</em>. Push more commits to the branch and the PR updates automatically — it is not frozen at creation time.</td></tr>
+    <tr><td>Review</td><td>Discussion, comments, and approvals attach to the PR on GitHub. Git itself knows nothing about any of this.</td></tr>
+    <tr><td>Merged</td><td>GitHub creates the merge on the <em>remote</em>. The target branch's pointer moves there; the source branch pointer stays put and is usually deleted afterward.</td></tr>
+  </table>
+
+  <h2>What merging moves (and what it doesn't)</h2>
+  <table>
+    <tr><th>Pointer</th><th>At PR merge</th></tr>
+    <tr><td>Remote <code>main</code> (on GitHub)</td><td>Moves to the new merge commit immediately.</td></tr>
+    <tr><td>Remote <code>add-notes</code> (on GitHub)</td><td>Stays put. Merging never moves the source branch.</td></tr>
+    <tr><td>Local <code>main</code>, local <code>origin/main</code></td><td>Move <strong>nothing</strong> until you fetch/pull — your machine hasn't heard the news. <code>git status</code> will even claim "up to date" because it compares against the stale record.</td></tr>
+  </table>
+
+  <h2>Core commands</h2>
+  <table>
+    <tr><th>Command</th><th>What it actually does</th></tr>
+    <tr><td><code>gh pr view [--web]</code></td><td>Shows the open PR for the current branch — commits, files changed, discussion.</td></tr>
+    <tr><td><code>gh pr merge --merge</code></td><td>Merges the PR with a merge commit (same as the green button; <code>--web</code> if you prefer the button).</td></tr>
+    <tr><td><code>git pull</code></td><td>On <code>main</code> after a PR merge: fetches the news and fast-forwards local <code>main</code> up to the merge commit.</td></tr>
+    <tr><td><code>git log --oneline --graph</code></td><td>Shows the merge as a diamond: the merge commit with two parent lines.</td></tr>
+    <tr><td><code>git branch -d &lt;name&gt;</code></td><td>Safe cleanup of a merged branch — deletes the label, refuses if work would be stranded.</td></tr>
+    <tr><td><code>git fetch --prune</code></td><td>Drops remote-tracking records for branches deleted on the remote.</td></tr>
+  </table>
+
+  <h2>Facts that prevent confusion later</h2>
+  <table>
+    <tr><th>Fact</th><th>Why it matters</th></tr>
+    <tr><td>A merge commit has two parents.</td><td>It joins two histories; <code>log --graph</code> draws it as a diamond. Every other commit has one parent (the root has none).</td></tr>
+    <tr><td>Merging doesn't destroy the source branch's commits.</td><td>They're now reachable from <code>main</code> too. Deleting the branch afterward removes only the label.</td></tr>
+    <tr><td>"Up to date" means up to date <em>with your record</em>.</td><td><code>git status</code> never checks the network. After anything happens on GitHub, fetch before trusting it.</td></tr>
+    <tr><td>GitHub offers three merge methods.</td><td>Merge commit (default, used here), squash, and rebase — the other two rewrite history and come later, if ever.</td></tr>
+  </table>
+
+  <p>
+    <a href="../lessons/0004-merging-with-a-pull-request.html">← Lesson 4: Merging with a pull request</a> ·
+    <a href="branch-model.html">Branch model</a> ·
+    <a href="github-model.html">GitHub model</a>
+  </p>
+</main>
